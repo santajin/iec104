@@ -11,7 +11,7 @@ namespace Shouyuan.IEC104
     /// </summary>
     public class M_ME_NB_1 : DatagramFormatterBase
     {
-        public const byte defaultASDUType = 9;
+        public const byte defaultASDUType = 11;
         public override byte DefaultASDUType => defaultASDUType;
 
         public override string Description => "标度化测量值报文格式";

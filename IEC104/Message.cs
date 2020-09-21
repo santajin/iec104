@@ -448,6 +448,43 @@ namespace Shouyuan.IEC104
             set => Extra[QOIi] = value;
         }
 
+        # region 设定命令限定词QOS
+        public byte QOSi = 0;
+        public byte QOS
+        {
+            get => Extra[QOSi];
+            set => Extra[QOSi] = value;
+        }
+        public byte QOS_QL
+        {
+            get => (byte)(QOS & 0x7f);
+            set => QOS = (byte)(value | (QOS & 0x80));
+        }
+        public bool QOS_SE
+        {
+            get => QOS.Bit(7);
+            set => QOS = value ? QOS.SetBit(7) : QOS.ClearBit(7);
+        }
+        #endregion
+
+        # region 单命令SCO
+        public bool SCO_SCS
+        {
+            get => SCO.Bit(0);
+            set => SCO = value ? SCO.SetBit(0) : SCO.ClearBit(0);
+        }
+        public byte SCO_QU
+        {
+            get => (byte)((SCO & 0x7c) >> 2);
+            set => SCO = (byte)(((value << 2) & 0x7c) | (SCO & 0x83));
+        }
+        public bool SCO_SE
+        {
+            get => SCO.Bit(7);
+            set => SCO = value ? SCO.SetBit(7) : SCO.ClearBit(7);
+        }
+        #endregion
+
 
         private bool CheckType(ElementType t, bool err = true)
         {
@@ -456,6 +493,40 @@ namespace Shouyuan.IEC104
             if (err)
                 throw new Exception("当前操作与信息体类型不兼容，本操作作用于" + t.ToString());
             return false;
+        }
+
+        /// <summary>
+        /// 单点遥信。
+        /// </summary>
+        public byte SIQ
+        {
+            get
+            {
+                CheckType(ElementType.SIQ);
+                return (byte)Element[0];
+            }
+            set
+            {
+                CheckType(ElementType.SIQ);
+                Element[0] = value;
+            }
+        }
+
+        /// <summary>
+        /// 单点命令。
+        /// </summary>
+        public byte SCO
+        {
+            get
+            {
+                CheckType(ElementType.SCO);
+                return (byte)Element[0];
+            }
+            set
+            {
+                CheckType(ElementType.SCO);
+                Element[0] = value;
+            }
         }
 
         /// <summary>

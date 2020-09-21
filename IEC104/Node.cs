@@ -57,7 +57,7 @@ namespace Shouyuan.IEC104
 
         private bool running = false;
 
-        private bool started = true;
+        // private bool started = true;
 
         const ushort MAX = 1 << 15;
         private ushort vs;

@@ -204,7 +204,7 @@ namespace Shouyuan.IEC104.DemoUI
 
                                     foreach (var i in d.ASDU.Messages)
                                     {
-                                        p.Inlines.Add(new Run("信息体") { Foreground = Brushes.Gray });
+                                        p.Inlines.Add(new Run(" 信息体") { Foreground = Brushes.Gray });
                                         p.Inlines.Add(new Run(i.Type.ToString()) { Foreground = Brushes.Blue });
                                         p.Inlines.Add(new Run("，地址：") { Foreground = Brushes.Gray });
                                         p.Inlines.Add(new Run(i.Address.ToString()) { Foreground = Brushes.Blue });
@@ -213,6 +213,9 @@ namespace Shouyuan.IEC104.DemoUI
                                             p.Inlines.Add(new Run("，值：") { Foreground = Brushes.Gray });
                                             switch (i.Type)
                                             {
+                                                case ElementType.SIQ:
+                                                    p.Inlines.Add(new Run(i.SIQ.ToString()) { Foreground = Brushes.Blue });
+                                                    break;
                                                 case ElementType.NVA:
                                                     p.Inlines.Add(new Run(i.NVA.ToString()) { Foreground = Brushes.Blue });
                                                     break;
@@ -222,6 +225,15 @@ namespace Shouyuan.IEC104.DemoUI
                                                 case ElementType.SVA:
                                                     p.Inlines.Add(new Run(i.SVA.ToString()) { Foreground = Brushes.Blue });
                                                     break;
+                                                case ElementType.SCO:
+                                                    p.Inlines.Add(new Run(i.SCO.ToString()) { Foreground = Brushes.Blue });
+                                                    p.Inlines.Add(new Run("，SCS：") { Foreground = Brushes.Gray });
+                                                    p.Inlines.Add(new Run(i.SCO_SCS ? "合" : "分") { Foreground = Brushes.Blue });
+                                                    p.Inlines.Add(new Run("，QU：") { Foreground = Brushes.Gray });
+                                                    p.Inlines.Add(new Run(i.SCO_QU.ToString()) { Foreground = Brushes.Blue });
+                                                    p.Inlines.Add(new Run("，S/E：") { Foreground = Brushes.Gray });
+                                                    p.Inlines.Add(new Run(i.SCO_SE ? "选择" : "执行") { Foreground = Brushes.Blue });
+                                                    break;
                                             }
                                         }
                                         if (i.Extra != null)
@@ -230,6 +242,15 @@ namespace Shouyuan.IEC104.DemoUI
                                             {
                                                 p.Inlines.Add(new Run("，附加信息：") { Foreground = Brushes.Gray });
                                                 p.Inlines.Add(new Run("召唤" + (i.QOI == Message.QOI_WholeStation ? "全站" : "第" + (i.QOI - Message.QOI_WholeStation).ToString() + "组")) { Foreground = Brushes.Blue });
+                                            }
+                                            else if (d.Formatter != null && d.Formatter.GetType() == typeof(C_SE_NC_1))
+                                            {
+                                                p.Inlines.Add(new Run("，设定命令限定词：") { Foreground = Brushes.Gray });
+                                                p.Inlines.Add(new Run(i.QOS.ToString()) { Foreground = Brushes.Blue });
+                                                p.Inlines.Add(new Run("，QL：") { Foreground = Brushes.Gray });
+                                                p.Inlines.Add(new Run(i.QOS_QL.ToString()){ Foreground = Brushes.Blue });
+                                                p.Inlines.Add(new Run("，S/E：") { Foreground = Brushes.Gray });
+                                                p.Inlines.Add(new Run(i.QOS_SE ? "选择" : "执行") { Foreground = Brushes.Blue });
                                             }
                                         }
                                         if (i.TimeStamp != null && i.TimeStamp.Length == 7)
@@ -444,36 +465,36 @@ namespace Shouyuan.IEC104.DemoUI
 
         }
 
-        APDU metf_tosend;
-        private void addValueButton_Click(object sender, RoutedEventArgs e)
-        {
-            var f = (M_ME_TF_1)node.FormatterManager.GetInstance(typeof(M_ME_TF_1));
-            if (metf_tosend == null)
-                metf_tosend = f.CreateAPDU(1);
-            try
-            {
-                var t = DateTime.Now;
-                if (UseNowCheckbox.IsChecked != true && DateToSendPicker.SelectedDate.HasValue)
-                {
-                    t = DateToSendPicker.SelectedDate.Value;
-                    t = new DateTime(t.Year, t.Month, t.Day, int.Parse(HourTextbox.Text), int.Parse(MinuteTextbox.Text), int.Parse(SecondTextbox.Text));
-                }
+        //APDU metf_tosend;
+        //private void addValueButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var f = (M_ME_TF_1)node.FormatterManager.GetInstance(typeof(M_ME_TF_1));
+        //    if (metf_tosend == null)
+        //        metf_tosend = f.CreateAPDU(1);
+        //    try
+        //    {
+        //        var t = DateTime.Now;
+        //        if (UseNowCheckbox.IsChecked != true && DateToSendPicker.SelectedDate.HasValue)
+        //        {
+        //            t = DateToSendPicker.SelectedDate.Value;
+        //            t = new DateTime(t.Year, t.Month, t.Day, int.Parse(HourTextbox.Text), int.Parse(MinuteTextbox.Text), int.Parse(SecondTextbox.Text));
+        //        }
 
-                f.PutData(metf_tosend, Convert.ToSingle(valTextbox.Text), t, Convert.ToUInt32(MsgAddrTextbox.Text));
-            }
-            catch (Exception) { }
+        //        f.PutData(metf_tosend, Convert.ToSingle(valTextbox.Text), t, Convert.ToUInt32(MsgAddrTextbox.Text));
+        //    }
+        //    catch (Exception) { }
 
-        }
+        //}
 
-        private void sendValueButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (metf_tosend == null)
-                addValueButton_Click(null, null);
+        //private void sendValueButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (metf_tosend == null)
+        //        addValueButton_Click(null, null);
 
-            node.SendAPDU(metf_tosend);
-            metf_tosend = null;
+        //    node.SendAPDU(metf_tosend);
+        //    metf_tosend = null;
 
-        }
+        //}
 
         private void minBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -519,6 +540,32 @@ namespace Shouyuan.IEC104.DemoUI
                 var apdu = f.Create(1, (byte)ic_groupCombobox.SelectedIndex);
                 node.SendAPDU(apdu);
 
+            }
+            catch (Exception) { }
+        }
+
+
+        private void SendYtButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var f = (C_SE_NC_1)node.FormatterManager.GetInstance(typeof(C_SE_NC_1));
+                var apdu = f.Create(1, uint.Parse(setPointAddrTextbox.Text), float.Parse(setPointValueTextbox.Text));
+                node.SendAPDU(apdu);
+
+            }
+            catch (Exception) { }
+        }
+
+        private void SendYkButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var f = (C_SC_NA_1)node.FormatterManager.GetInstance(typeof(C_SC_NA_1));
+                bool se = (se_groupCombobox.SelectedIndex == 0) ? true : false;
+                bool scs = (scs_groupCombobox.SelectedIndex == 0) ? false : true;
+                var apdu = f.Create(1, uint.Parse(scAddrTextbox.Text), se, byte.Parse(scQUTextbox.Text), scs);
+                node.SendAPDU(apdu);
             }
             catch (Exception) { }
         }

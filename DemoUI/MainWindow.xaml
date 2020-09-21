@@ -58,7 +58,7 @@
             <Button Name="disconnectBtn" Grid.Column="1" Content="断开连接" Click="disconnectBtn_Click" />
         </Grid>
         <TabControl Grid.Row="4" >
-            <TabItem Header="短浮点长时标">
+            <!--<TabItem Header="短浮点长时标">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -91,7 +91,7 @@
                     <Button Name="sendValueButton" Content="发送" Click="sendValueButton_Click" Grid.Column="2" Grid.Row="1"/>
 
                 </Grid>
-            </TabItem>
+            </TabItem>-->
             <TabItem Header="单召唤">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -136,6 +136,58 @@
                     <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Text="召唤范围"/>
                     <ComboBox Name="ic_groupCombobox" Grid.Column="1" VerticalContentAlignment="Center" FontSize="15" SelectedIndex="0" ItemsSource="{StaticResource ResourceKey=ic_groups}"/>
                     <Button Name="ic_SendBtn" Content="发送" Click="ic_sendBtn_Click" Grid.Column="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="设点命令，短浮点数" HorizontalAlignment="Left" Height="19.24" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Text="信息体地址"/>
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Name="setPointAddrTextbox" Text="25089" Grid.Column="1"/>
+                    <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="2" Text="短浮点数"/>
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Name="setPointValueTextbox" Text="1" Grid.Column="3"/>
+                    <Button Name="sendYtButton" Content="发送" Click="SendYtButton_Click" Grid.Column="4"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="单点遥控命令" HorizontalAlignment="Left" Height="19.24" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <x:Array x:Key="se_groups" Type="sys:String">
+                            <sys:String>选择</sys:String>
+                            <sys:String>执行</sys:String>
+                        </x:Array>
+                        <x:Array x:Key="scs_groups" Type="sys:String">
+                            <sys:String>分(0)</sys:String>
+                            <sys:String>合(1)</sys:String>
+                        </x:Array>
+                    </Grid.Resources>
+                    <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Text="信息体地址"/>
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Name="scAddrTextbox" Text="24577" Grid.Column="1"/>
+                    <!--<TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="2" Text="SCO"/>
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Name="setPointValueTextbox" Text="1" Grid.Column="3"/>-->
+                    <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="2" Text="S/E"/>
+                    <ComboBox Name="se_groupCombobox" Grid.Column="3" VerticalContentAlignment="Center" FontSize="15" SelectedIndex="0" ItemsSource="{StaticResource ResourceKey=se_groups}"/>
+                    <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="4" Text="QU"/>
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Name="scQUTextbox" Text="0" Grid.Column="5"/>
+                    <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="6" Text="SCS"/>
+                    <ComboBox Name="scs_groupCombobox" Grid.Column="7" VerticalContentAlignment="Center" FontSize="15" SelectedIndex="0" ItemsSource="{StaticResource ResourceKey=scs_groups}"/>
+                    <Button Name="sendYkButton" Content="发送" Click="SendYkButton_Click" Grid.Column="8"/>
                 </Grid>
             </TabItem>
             <TabItem Header="...">
